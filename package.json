@@ -1,0 +1,16 @@
+{
+  "name": "chustagram",
+  "version": "1.0.0",
+  "description": "botsoo",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Luiza Mazo",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "twit": "^2.2.11"
+  }
+}

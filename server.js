@@ -25,8 +25,7 @@ function upload_random_image(images){
             console.log('tuitando agr')
 
             let tweet_text = random_from_array([
-                'huhuhuhuhueheeheeu',
-                'hmmmmm kkkk'
+                'huhuhuhuhueheeheeu'
             ])
 
             twit.post('statuses/update', {

@@ -11,6 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^8.2.0",
-    "twit": "^2.2.11"
+    "instagram-posts": "^2.2.0",
+    "twit": "^2.2.11",
+    "instagram-save": "^1.3.2"
   }
 }

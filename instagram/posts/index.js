@@ -1,65 +1,110 @@
 const instagramPosts = require('instagram-posts');
 const save = require('instagram-save');
-
-var fs = require('fs'),
+const axios = require('axios'); 
+let utils = require('../utils');
 request = require('request');
- 
-(async () => {
+
+let getInstagramPost = async () => {
 
     let response = await instagramPosts('renebaebae', {count: 25})
+    let media = await saveMedia(response),
+        username = response[0].username,
+        text = response[0].text,
+        text = text.replace('@', '@.')
+        time = response[0].time
+    let instagramPost = [{
+      'media': media,
+      'username': username,
+      'text': text,
+      'time': time
+    }]
 
-    console.log(response)
+    return instagramPost
+}
 
-    if(response[0].__typename == 'GraphSidecar'){
-        response[0].url = response[0].url + '?__a=1'
-        request.get(response[0].url, function(err,res,body){
-         
-          body = JSON.parse(body)
-          let media = body.graphql.shortcode_media
-          media = Object.entries(media.edge_sidecar_to_children)
-          let uri = []
+let saveMedia = async (response) => {
+  let responseTypename = response[14].__typename
+  let responseUrl = response[14].url
+  let shortcodeOrder = []
+  let singleMedia = ''
 
-          for (const [key, value] of media) {
-            
-            let node = value.map((novo) => {
-             return novo.node
-            })
-    
-            for(child of node){
-              if(child.is_video){
-                uri.push({
-                  'url': child.video_url,
-                  'shortcode': child.shortcode
-                })
-              }else{
-                uri.push({
-                  'url': child.display_url,
-                  'shortcode': child.shortcode
-                })
-              }
-            } 
-          }
-        
-          for(value of uri){  
-            download(value.url, value.shortcode, function(){
-              console.log('done')
-            })
-          }
-      })  
+  if(responseTypename == 'GraphSidecar'){
+   await convertGraphSideCar(responseUrl).then(shortcode => {
+    shortcodeOrder = shortcode
+   })
+  }else{
+    singleMedia= await save(responseUrl, '../../media').then(res => {
+      let fileName = res.url 
+      fileName = fileName.replace('https://www.instagram.com/p/', '')
+      return fileName
+    })
+  }
+
+  return shortcodeOrder.length == 0 ? singleMedia : shortcodeOrder
+}
+
+let convertGraphSideCar = async responseUrl => {
+  
+    responseUrl = responseUrl + '?__a=1'
+    let urlShortcode = []
+
+    return await axios({url: responseUrl, method: 'GET' })
+      .then(response => {
+        let body = response.data
+        let media = body.graphql.shortcode_media
+        media = Object.entries(media.edge_sidecar_to_children)
+
+        for(const[key, value] of media) {
+          let node = value.map((novo) => {
+            return novo.node
+          })
+          urlShortcode = createUrlShortCode(node)
+        }
+  
+        for(value of urlShortcode){  
+          utils.download(value.url, value.shortcode, function(){
+            console.log('done')
+          })
+        } 
+       
+       shortcodeOrder = orderMedia(urlShortcode)
+       return shortcodeOrder
+      }).catch(error => {
+        console.log(error)
+      })
+}
+
+let createUrlShortCode = node => {
+  let uri = []
+  for(child of node){
+    if(child.is_video){
+      uri.push({
+        'url': child.video_url,
+        'shortcode': child.shortcode
+      })
     }else{
-      save(response[1].url, './media').then(res => {
-        console.log(res);
+      uri.push({
+        'url': child.display_url,
+        'shortcode': child.shortcode
       })
     }
-})()
+  } 
+  return uri
+}
 
-var download = function(uri, filename, callback){
-  request.head(uri, function(err, res, body){
-    console.log('content-type:', res.headers['content-type']);
-    console.log('content-length:', res.headers['content-length']);
-    var type =  res.headers['content-type'];
-    type = type.substring(type.indexOf("/") + 1);
+let orderMedia = urlShortcode => {
+  let shortcodeOrder = urlShortcode.map(value => {
+    return value.shortcode
+  })
+  return shortcodeOrder
+}
 
-    request(uri).pipe(fs.createWriteStream('../../media/' + [filename + '.' + type])).on('close', callback);
-  });
-};
+(async () => {
+  let teste = await getInstagramPost()
+  console.log(teste)
+})
+();
+
+module.exports = {
+  getInstagramPost
+}

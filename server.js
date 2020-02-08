@@ -19,12 +19,14 @@ function upload_random_image(images){
     console.log('uploading image')
 
     twit.post('media/upload', { media_data: b64content }, (err, data, response) => {
+
+        console.log('RESPONSE0', data)
         if(err){
             console.log('error')
             console.log(err)
         }else{
-            console.log('image uploaded')
-            console.log('tuitando agr')
+          //  console.log('image uploaded')
+          //  console.log('tuitando agr')
 
             let tweet_text = random_from_array([
                 'huhuhuhuhueheeheeu'
@@ -39,7 +41,7 @@ function upload_random_image(images){
                     console.log('ERROR0')
                     console.log(err)
                 }else{
-                    console.log('postou img')
+                    //console.log('postou img')
 
                     fs.unlink(image_path, function(err){
                         if(err){

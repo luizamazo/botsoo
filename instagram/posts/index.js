@@ -10,11 +10,13 @@ let getInstagramPost = async () => {
     let media = await saveMedia(response),
         username = response[0].username,
         text = response[0].text,
-        time = response[0].time
+        time = response[0].time,
+        typename = response[0].__typename
         
     text = text.replace('@', '@.')
-
+  //console.log('response aki', response[0])
     let instagramPost = [{
+      'typename': typename,
       'media': media,
       'username': username,
       'text': text,
@@ -62,9 +64,11 @@ let convertGraphSideCar = async responseUrl => {
           })
           urlShortcode = createUrlShortCode(node)
         }
-  
+        
+        let number = 0
         for(value of urlShortcode){  
-          utils.download(value.url, value.shortcode, function(){
+          number++
+          utils.download(value.url, `${number} - ` + value.shortcode, function(){
             //console.log('done')
           })
         } 
@@ -79,15 +83,18 @@ let convertGraphSideCar = async responseUrl => {
 let createUrlShortCode = node => {
   let uri = []
   for(child of node){
+   
     if(child.is_video){
       uri.push({
         'url': child.video_url,
-        'shortcode': child.shortcode
+        'shortcode': child.shortcode,
+        'is_video': child.is_video
       })
     }else{
       uri.push({
         'url': child.display_url,
-        'shortcode': child.shortcode
+        'shortcode': child.shortcode,
+        'is_video': child.is_video
       })
     }
   } 

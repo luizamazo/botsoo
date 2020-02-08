@@ -24,21 +24,65 @@ fs.readdir(__dirname + '/media', function(err, files){
 let uploadMedia = async (media) => {
 
    let instagramPost =  await instagram.getInstagramPost()
-   let mediaOrder = instagramPost[0].media
 
-    console.log('mediaOrder', mediaOrder)
-    console.log('media', media)
-
-    if(mediaOrder.length){
-        for(file of media){
-            //aqui eu passo tudo que vem da pasta media
-            let mediaPath = path.join(__dirname, '/media/' + file)
-            b64content = fs.readFileSync(mediaPath, {encoding:'base64'})
-            console.log('oi')
-        }
+    //console.log(instagramPost)
+    let mediaPath = []
+    let mediaIdStrings = []
+    let mediaIdStringVideo = ''
+    
+    fourPhotos = media.slice(0, 4)
+    for(file of fourPhotos){
+        mediaPath = path.join(__dirname, '/media/' + file) 
+        await postMedia(mediaPath).then(mediaData => {
+            if(mediaData.image.image_type == 'image/jpeg'){
+                console.log(mediaData.image.image_type)
+                mediaIdStrings.push(mediaData.media_id_string)
+            }else{
+                mediaIdStringVideo = media.media_id_string
+                //postLinkedTweet()
+            }
+        })
     }
-    
-    
 
-   // await postTweet(b64content)
+    if(mediaIdStrings.length > 1){
+       // console.log('mediaIdStrings', mediaIdStrings)
+        postTweet(instagramPost, mediaIdStrings)
+    }  
+}
+
+let postMedia = async (mediaPath) => {
+    b64content = fs.readFileSync(mediaPath, {encoding:'base64'})
+
+    return twit.post('media/upload', {media_data: b64content})
+        .then(result => {
+         //   console.log('data', result.data);
+            return result.data
+        }).catch(err => {
+            console.log('caught error', err.stack)
+        })
+       
+    }
+
+
+let postTweet = async (instagramPost, mediaIdStrings) => {
+   
+    let text = instagramPost[0].text,
+    media = instagramPost[0].media,
+    username = instagramPost[0].username,
+    time = instagramPost[0].time,
+    mediaCount = ''
+
+   let tweet_text = `|POST| ${username}: `
+
+  twit.post('statuses/update', {
+        status: tweet_text,
+        media_ids: new Array(mediaIdStrings)
+    }, (err, data, response) => {
+        if(err){
+            console.log('ERROR NOVO')
+            console.log(err)
+        }else{
+            console.log('postou')
+        }
+    })
 }

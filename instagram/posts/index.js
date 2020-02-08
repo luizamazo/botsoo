@@ -10,8 +10,10 @@ let getInstagramPost = async () => {
     let media = await saveMedia(response),
         username = response[0].username,
         text = response[0].text,
-        text = text.replace('@', '@.')
         time = response[0].time
+        
+    text = text.replace('@', '@.')
+
     let instagramPost = [{
       'media': media,
       'username': username,
@@ -23,8 +25,8 @@ let getInstagramPost = async () => {
 }
 
 let saveMedia = async (response) => {
-  let responseTypename = response[14].__typename
-  let responseUrl = response[14].url
+  let responseTypename = response[0].__typename
+  let responseUrl = response[0].url
   let shortcodeOrder = []
   let singleMedia = ''
 
@@ -63,7 +65,7 @@ let convertGraphSideCar = async responseUrl => {
   
         for(value of urlShortcode){  
           utils.download(value.url, value.shortcode, function(){
-            console.log('done')
+            //console.log('done')
           })
         } 
        
@@ -99,11 +101,11 @@ let orderMedia = urlShortcode => {
   return shortcodeOrder
 }
 
-(async () => {
+/*(async () => {
   let teste = await getInstagramPost()
   console.log(teste)
 })
-();
+(); */
 
 module.exports = {
   getInstagramPost

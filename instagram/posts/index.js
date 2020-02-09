@@ -6,7 +6,9 @@ request = require('request');
 
 let getInstagramPost = async () => {
 
-    let response = await instagramPosts('renebaebae', {count: 25})
+    let response = await instagramPosts('corongabot', {count: 25})
+
+    //aqui faço verificaçao
     let media = await saveMedia(response),
         username = response[0].username,
         text = response[0].text,
@@ -62,7 +64,7 @@ let convertGraphSideCar = async responseUrl => {
           let node = value.map((novo) => {
             return novo.node
           })
-          urlShortcode = createUrlShortCode(node)
+          urlShortcode = getUrlShortCode(node)
         }
         
         let number = 0
@@ -80,7 +82,7 @@ let convertGraphSideCar = async responseUrl => {
       })
 }
 
-let createUrlShortCode = node => {
+let getUrlShortCode = node => {
   let uri = []
   for(child of node){
    

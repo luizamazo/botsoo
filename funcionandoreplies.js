@@ -33,47 +33,37 @@ let uploadMedia = async (media) => {
     let mediaIdStringVideo = ''
     let mediaType = ''
     let userIdTweetId = '',
-    isEndOfFiles = false,
+  
     isVideoFirst = false
 
     if(instagramMedia.length > 1){ 
         let start = 0,
         end = 4
         limitedMedia = media.slice(start, 4)
-        while(isEndOfFiles == false){
-            if(mediaIdStrings <= 4){
-                for(file of media){
+        for(file of limitedMedia){
            
-                    mediaPath = path.join(__dirname, '/media/' + file) 
-                    mediaType = getMediaType(mediaPath)
-                 
-                    let mediaInfo = await postMedia(mediaPath, mediaType)
-        
-                    if(mediaInfo.video){ //se eh video
-                        mediaIdStringVideo = mediaInfo.media_id_string
-                        if(mediaPath.includes('1 -')){
-                            userIdTweetId = await postTweet(instagramPost, mediaIdStringVideo)
-                            start++
-                            end++ 
-                            isVideoFirst = true
-                        }
-        
-                        if(isVideoFirst == false){
-                           // await postLinkedTweet(instagramPost, mediaIdStringVideo, userIdTweetId)
-                        }
-                    }
-                    if(mediaInfo.image){
-                        mediaIdStrings.push(mediaInfo.media_id_string)
-                    }
+            mediaPath = path.join(__dirname, '/media/' + file) 
+            mediaType = getMediaType(mediaPath)
+         
+            let mediaInfo = await postMedia(mediaPath, mediaType)
+
+            if(mediaInfo.video){ //se eh video
+                mediaIdStringVideo = mediaInfo.media_id_string
+                if(mediaPath.includes('1 -')){
+                    userIdTweetId = await postTweet(instagramPost, mediaIdStringVideo)
+                    start++
+                    end++ 
+                    isVideoFirst = true
                 }
 
-                if(mediaIdStrings == 4){
-                        
+                if(isVideoFirst == false){
+                   // await postLinkedTweet(instagramPost, mediaIdStringVideo, userIdTweetId)
                 }
             }
-           
+            if(mediaInfo.image){
+                mediaIdStrings.push(mediaInfo.media_id_string)
+            }
         }
-        
 
         if(mediaIdStrings.length > 1){
             if(userIdTweetId == ''){

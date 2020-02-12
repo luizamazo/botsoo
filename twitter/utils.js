@@ -8,7 +8,7 @@ let makePost = async (endpoint, params) =>{
 
     return twit.post(endpoint, params)
         .then(result => {
-            console.log('make post', result.data)
+           // console.log('make post', result.data)
            return result.data
         }).catch(err => {
             console.log('caught error', err.stack)

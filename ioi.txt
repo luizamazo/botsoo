@@ -1,0 +1,79 @@
+Luiza@luidys MINGW64 ~/Downloads/uni/chustagram (develop_botsoo)
+$ node index.js
+caught error Error: Missing required parameter: status.
+    at Object.exports.makeTwitError (C:\Users\luiza\Downloads\uni\chustagram\node_modules\twit\lib\helpers.js:74:13)
+    at onRequestComplete (C:\Users\luiza\Downloads\uni\chustagram\node_modules\twit\lib\twitter.js:344:25)
+    at Request.<anonymous> (C:\Users\luiza\Downloads\uni\chustagram\node_modules\twit\lib\twitter.js:364:7)
+    at Request.emit (events.js:215:7)
+    at Gunzip.<anonymous> (C:\Users\luiza\Downloads\uni\chustagram\node_modules\request\request.js:1083:12)
+    at Object.onceWrapper (events.js:299:28)
+    at Gunzip.emit (events.js:215:7)
+    at endReadableNT (_stream_readable.js:1184:12)
+    at processTicksAndRejections (internal/process/task_queues.js:80:21)
+tweet #1 ==> {
+  created_at: 'Tue Feb 11 18:22:51 +0000 2020',
+  id: 1227296956248133600,
+  id_str: '1227296956248133633',
+  text: 'Testing twitter NPM library',
+  truncated: false,
+  entities: { hashtags: [], symbols: [], user_mentions: [], urls: [] },
+  source: '<a href="https://github.com/luizamazo" rel="nofollow">botsoo</a>',
+  in_reply_to_status_id: null,
+  in_reply_to_status_id_str: null,
+  in_reply_to_user_id: null,
+  in_reply_to_user_id_str: null,
+  in_reply_to_screen_name: null,
+  user: {
+    id: 1225590595130921000,
+    id_str: '1225590595130920967',
+    name: 'BotSoo',
+    screen_name: 'corongabot',
+    location: '',
+    description: '',
+    url: null,
+    entities: { description: [Object] },
+    protected: false,
+    followers_count: 0,
+    friends_count: 0,
+    listed_count: 0,
+    created_at: 'Fri Feb 07 01:22:45 +0000 2020',
+    favourites_count: 0,
+    utc_offset: null,
+    time_zone: null,
+    geo_enabled: false,
+    verified: false,
+    statuses_count: 2,
+    lang: null,
+    contributors_enabled: false,
+    is_translator: false,
+    is_translation_enabled: false,
+    profile_background_color: 'F5F8FA',
+    profile_background_image_url: null,
+    profile_background_image_url_https: null,
+    profile_background_tile: false,
+    profile_image_url: 'http://pbs.twimg.com/profile_images/1225590925012983808/-_SM2zHJ_normal.jpg',
+    profile_image_url_https: 'https://pbs.twimg.com/profile_images/1225590925012983808/-_SM2zHJ_normal.jpg',
+    profile_link_color: '1DA1F2',
+    profile_sidebar_border_color: 'C0DEED',
+    profile_sidebar_fill_color: 'DDEEF6',
+    profile_text_color: '333333',
+    profile_use_background_image: true,
+    has_extended_profile: false,
+    default_profile: true,
+    default_profile_image: false,
+    following: false,
+    follow_request_sent: false,
+    notifications: false,
+    translator_type: 'none'
+  },
+  geo: null,
+  coordinates: null,
+  place: null,
+  contributors: null,
+  is_quote_status: false,
+  retweet_count: 0,
+  favorite_count: 0,
+  favorited: false,
+  retweeted: false,
+  lang: 'en'
+}

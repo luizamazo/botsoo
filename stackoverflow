@@ -1,0 +1,21 @@
+
+  for(const[index, file] of media.entries()){
+        mediaPath = path.join(__dirname, '/media/' + file) 
+        mediaType = getMediaType(mediaPath)
+        mediaInfo = await uploadChunkedMedia(mediaPath, mediaType)
+        
+        console.log(`
+        index: ${index},
+        tweet_id: ${tweet_id}
+        `)
+
+        if(mediaInfo.video){
+          mediaIdStringVideo = mediaInfo.media_id_string
+          if(mediaPath.includes('1 -')){
+            tweet_id = await bosta(tweet, null, mediaIdStringVideo)
+          }else{
+            tweet_id = await bosta(tweet, tweet_id, mediaIdStringVideo)
+          }
+        }
+    
+      }
